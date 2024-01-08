@@ -1,8 +1,8 @@
-def turn(d):
-    f=[lambda i,s,h:s+6-h+i>12,lambda i:(d[5][i],0)[i==d[2]-1]+d[3]//14+d[7].count(i),lambda:(f[1](d[4])==1 and d[3]>7 and(d[4]in range(d[0]-6,d[0]))),lambda:sum([f[1](i)for i in range(d[0]-6,d[0])])]
-    print("".join([f"[{i}]"for i in d[5][0:6]])+"\n"+"".join(f"[{b}]"for b in[d[5][13],0,0,0,0,d[5][6]])+"\n"+"".join([f"[{i}]"for i in d[5][12:6:-1]]))
-    g=[lambda x,o,w:d[8](int(input(f"Player {d[0]%6+1}´s turn,\nchoose a bowl between 1 and 6 :"))+d[0]-6,d[0],d[5],x,d,f[0],d[1],o,w),lambda i:(sum(d[5][(d[0]+1)%14:d[1]]),0)[i!=d[0]]]
-    d[2:8]=g[0](g[0],lambda i,f,a,s,h:[(i+u+f(u,s,h))%14 for u in range(a[(i-1)]%14)],lambda i,a,e:(i-1+a[i-1])%14+((i-1+a[i-1])%14==e))
-    d[5]=[(f[1](i)+((0,g[1](i))[not f[3]()],f[1](d[4])+f[1](12-d[4]))[f[2]()and i==d[0]],0)[i==d[2]-1 or(f[2]()and i in[d[4],12-d[4]])or(not f[3]()and i not in d[:2])]for i in d[6]]
-    return f"Winner is Player{d[5][6]<d[5][13+1]}"if not sum([b for b in d[6]if b not in d[:2]])else turn(d if d[4]==d[0]else[d[1],d[0]]+d[2:])
-print(turn([6,13,-1,0,0,[0,0,0,0,0,0,6,6,6,6,6,6,0],range(14),[],lambda i,h,a,g,d,f,e,o,w:[i,a[i-1],w(i,a,e)]+d[5:7]+[o(i,f,a,i,h)]if(i-h+6 in range(1,7)and a[i-1]!=0)else g(g,o,w)]))
+
+
+def k(a_p,u_p,p_2,map,g):
+    print("   "+"".join([f"[{i}]"for i in a_p])+"\n"+"".join([f"[{i}]"for i in u_p[6::-1]]))
+    (start, end) = (lambda j ,h: h(j(),h,j))(lambda:int(input(f"P{p_2+1}, choose a bowl between 1 and 6 :")),lambda i,f,g : (i,(i+map[i-1]-1)%13) if 0<i<7 and a_p[i-1]!=0 else f(g(),f,g))
+    map =[max(0,((g(end,map,start)+g(12-end,map,start)))*(-2)**(i!=6)*(12<start+map[start-1]<21)*(map[end]==0)*(i in [end,12-end,6]) + g(i,map,start)) for i in range(13)]
+    return f"Winner is Player{2-((u_p[6]<sum(map))+(p_2))%2}"if not sum(map[:6]) else k(map[:7],map[7:]+u_p[6:],p_2,map,g) if end==6 else k(map[7:]+u_p[6:],map[:7],not p_2,map[7:]+u_p[6:]+map[:6],g)
+print(k([6,6,6,6,6,6,0],[6,6,6,6,6,6,0],False, [6,6,6,6,6,6,0,6,6,6,6,6,6],lambda i,map,start: map[i]*(i!=start-1)+map[start-1]//13+((i-start)%13<map[start-1]%13)))
